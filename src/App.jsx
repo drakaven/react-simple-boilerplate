@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
 
-const squares = [1, 2, 3];
+
+
+
 
 class App extends Component {
 
@@ -25,7 +27,6 @@ class App extends Component {
     }
   }
 
-
   componentDidMount() {
     console.log("componentDidMount <App />");
     setTimeout(() => {
@@ -38,7 +39,6 @@ class App extends Component {
       this.setState({messages: messages})
     }, 3000);
   }
-
 
 
   render() {
