@@ -15,4 +15,3 @@ class MessageList extends Component {
 export default MessageList;
 
 
-//{ state.squares.map( (value, i) => { return <Square index={i} value={value} /> } ) }
