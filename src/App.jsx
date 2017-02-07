@@ -1,15 +1,23 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
-
-
-
 
 
 class App extends Component {
 
   constructor(props) {
     super(props);
+
+    this.handleKeyPress = (event) => {
+      if (event.key == 'Enter') {
+        const username = document.getElementById('username').value;
+        const content = document.getElementById('new-message').value;
+        const newMessage = {id: this.state.messages.length + 1, username: username, content: content};
+        const messages = this.state.messages.concat(newMessage);
+        this.setState({messages: messages});
+      }
+    };
+
     this.state = {
       currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [
@@ -31,18 +39,14 @@ class App extends Component {
     console.log("componentDidMount <App />");
     setTimeout(() => {
       console.log("Simulating incoming message");
-      // Add a new message to the list of messages in the data store
       const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
-      const messages = this.state.messages.concat(newMessage)
-      // Update the state of the app component.
-      // Calling setState will trigger a call to render() in App and all child components.
+      const messages = this.state.messages.concat(newMessage);
       this.setState({messages: messages})
-    }, 3000);
+    }, 1);
   }
 
-
   render() {
-    console.log("Rendering <App/>");    
+    console.log("Rendering <App/>");
     return (
       <div className="wrapper">
         <nav>
@@ -50,7 +54,7 @@ class App extends Component {
         </nav>
         <MessageList messages={this.state.messages}>
         </MessageList>
-        <ChatBar defaultName={this.state.currentUser.name}/>
+        <ChatBar handleKeyPress={this.handleKeyPress} defaultName={this.state.currentUser.name}/>
       </div>
     );
   }
