@@ -7,12 +7,12 @@ class MessageList extends Component {
     
     return (
      <div id="message-list">
-       <Message />
-       <Message />
-       <Message />
-       <Message />
+       {this.props.messages.map( (item) => { return <Message key={item.id} name={item.username} content={item.content}/> })}
      </div>
     );
   }
 }
 export default MessageList;
+
+
+//{ state.squares.map( (value, i) => { return <Square index={i} value={value} /> } ) }
