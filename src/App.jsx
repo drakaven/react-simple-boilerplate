@@ -14,6 +14,7 @@ class App extends Component {
         const content = document.getElementById('new-message').value;
         const newMessage = {id: this.state.messages.length + 1, username: username, content: content};
         const messages = this.state.messages.concat(newMessage);
+        this.socket.send(JSON.stringify(newMessage));
         this.setState({messages: messages});
       }
     };
@@ -32,17 +33,17 @@ class App extends Component {
           content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
         }
       ]
-    }
+    };
+
+    this.socket = null;
   }
 
   componentDidMount() {
     console.log("componentDidMount <App />");
-    setTimeout(() => {
-      console.log("Simulating incoming message");
-      const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
-      const messages = this.state.messages.concat(newMessage);
-      this.setState({messages: messages})
-    }, 1);
+    this.socket = new WebSocket("ws://localhost:4000");
+    this.socket.onopen = function (event) {
+       console.log("Connected Web Socket");
+     };
   }
 
   render() {
