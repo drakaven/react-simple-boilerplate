@@ -12,11 +12,9 @@ class App extends Component {
       if (event.key == 'Enter') {
         const username = document.getElementById('username').value;
         const content = document.getElementById('new-message').value;
-        //const newMessage = {id: this.state.messages.length + 1, username: username, content: content};
-        //const messages = this.state.messages.concat(newMessage);
         const newMessage = {username: username, content: content};
         this.socket.send(JSON.stringify(newMessage));
-       // this.setState({messages: messages});
+
       }
     };
 
@@ -24,9 +22,10 @@ class App extends Component {
       currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: []
     };
-
-    this.socket = null;
   }
+
+
+
 
   componentDidMount() {
     console.log("componentDidMount <App />");
@@ -34,6 +33,12 @@ class App extends Component {
     this.socket.onopen = function (event) {
        console.log("Connected Web Socket");
      };
+    this.socket.onmessage = (event) => {
+      const parsed = JSON.parse(event.data);
+      const newMessage = {id: this.state.messages.length + 1, username: parsed.username, content: parsed.content};
+      const messages = this.state.messages.concat(newMessage);
+      this.setState({messages: messages});
+    }
   }
 
   render() {
