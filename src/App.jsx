@@ -12,27 +12,17 @@ class App extends Component {
       if (event.key == 'Enter') {
         const username = document.getElementById('username').value;
         const content = document.getElementById('new-message').value;
-        const newMessage = {id: this.state.messages.length + 1, username: username, content: content};
-        const messages = this.state.messages.concat(newMessage);
+        //const newMessage = {id: this.state.messages.length + 1, username: username, content: content};
+        //const messages = this.state.messages.concat(newMessage);
+        const newMessage = {username: username, content: content};
         this.socket.send(JSON.stringify(newMessage));
-        this.setState({messages: messages});
+       // this.setState({messages: messages});
       }
     };
 
     this.state = {
       currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: [
-        {
-          id: 1,
-          username: "Bob",
-          content: "Has anyone seen my marbles?",
-        },
-        {
-          id: 2,
-          username: "Anonymous",
-          content: "No, I think you lost them. You lost your marbles Bob. You lost them for good."
-        }
-      ]
+      messages: []
     };
 
     this.socket = null;
