@@ -4,6 +4,7 @@ import Message from './Message.jsx';
 
 class MessageList extends Component {
   render() {
+    console.log('list');
     return (
      <div id="message-list">
      <Message></Message>     

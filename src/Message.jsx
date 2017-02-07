@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 class Message extends Component {
   render() {
+    console.log('message');
     return (
      <div class="message">
       <span class="username">Anonymous1</span>
