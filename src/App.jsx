@@ -9,12 +9,11 @@ class App extends Component {
   render() {
     console.log("Rendering <App/>");    
     return (
-      <div class="wrapper">
+      <div className="wrapper">
         <nav>
           <h1>Chatty</h1>
         </nav>
         <MessageList>
-          <Message />  
         </MessageList>
         <ChatBar />
       </div>

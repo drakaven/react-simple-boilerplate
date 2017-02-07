@@ -7,7 +7,10 @@ class MessageList extends Component {
     
     return (
      <div id="message-list">
-     <Message></Message>     
+       <Message />
+       <Message />
+       <Message />
+       <Message />
      </div>
     );
   }
