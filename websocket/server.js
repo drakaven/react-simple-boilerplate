@@ -26,7 +26,7 @@ wss.broadcast = (data, ws) => {
 
 wss.on('connection', (ws) => {
     console.log('Client connected');
-    wss.broadcast(wss.clients.size);
+    wss.broadcast(JSON.stringify({type: "onlineUsers", onlineUsers :  wss.clients.size}));
 
     ws.on('message', function (data, flags) {
         let parsed = (JSON.parse(data));
@@ -35,8 +35,7 @@ wss.on('connection', (ws) => {
         {
             case "postNotification" :
             parsed.type = "incomingNotification"
-            break;
-            
+            break;            
             case "postMessage":
             parsed.type = "incomingMessage"
     }
@@ -48,7 +47,7 @@ wss.on('connection', (ws) => {
     });
     ws.on('close', () => {
         console.log('Client disconnected')
-        wss.broadcast(wss.clients.size);
+        wss.broadcast(JSON.stringify({type: "onlineUsers", onlineUsers :  wss.clients.size}));
     }
     );
 

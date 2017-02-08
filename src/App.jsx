@@ -22,7 +22,7 @@ class App extends Component {
       if (event.key === 'Enter') {
         const username = this.state.userValue;
         this.setState({currentUser: username});
-        const newMessage = {type : 'postNotification' , content: username + " has changed their name to " + this.state.prevUser};
+        const newMessage = {type : 'postNotification' , content: this.state.prevUser + " has changed their name to " + username};
         this.socket.send(JSON.stringify(newMessage));
       }
     });
@@ -48,10 +48,18 @@ class App extends Component {
        console.log("Connected Web Socket");
      };
     this.socket.onmessage = (event) => {
+
       const parsed = JSON.parse(event.data);
-      const newMessage = {id: parsed.id, username: parsed.username, content: parsed.content};
-      const messages = this.state.messages.concat(newMessage);
-      this.setState({messages: messages});
+      switch(parsed.type) {
+        case "onlineUsers":
+          this.setState({onlineUsers: parsed.onlineUsers});
+          break;
+        default:
+          console.log(parsed);
+          const newMessage = {id: parsed.id, username: parsed.username, content: parsed.content};
+          const messages = this.state.messages.concat(newMessage);
+          this.setState({messages: messages});
+      }
     }
   }
 
@@ -61,7 +69,7 @@ class App extends Component {
       <div className="wrapper">
         <nav>
           <h1>Chatty</h1>
-          <p>{this.state.onlineUsers}</p>
+          <span>{this.state.onlineUsers} users online</span>
         </nav>
         <MessageList messages={this.state.messages}>
         </MessageList>
