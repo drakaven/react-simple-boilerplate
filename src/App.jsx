@@ -25,7 +25,7 @@ class App extends Component {
         const username = this.state.currentUser;
 
         let content = document.getElementById('new-message').value;
-        content = this.imageReplaceContent(content);
+        //content = this.imageReplaceContent(content);
         const newMessage = {type: 'postMessage', username: username, content: content, color: this.state.color};
         this.socket.send(JSON.stringify(newMessage));
 
