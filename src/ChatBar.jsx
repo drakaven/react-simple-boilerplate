@@ -6,9 +6,10 @@ class ChatBar extends Component {
     render() {
         console.log('chatbar');
         return (
-            <footer onKeyPress={(event) => {this.props.handleKeyPress(event)}}>
-                <input id="username" type="text" placeholder={this.props.defaultName} />
-                <input id="new-message" type="text" placeholder="Type a message and hit ENTER" />
+            <footer >
+                <input onKeyPress={(event) => {this.props.handleChangeUser(event)}} id="username" type="text" placeholder={this.props.defaultName} />
+                <input onKeyPress={(event) => {this.props.handleSendMessage(event)}}
+                       id="new-message" type="text" placeholder="Type a message and hit ENTER" />
             </footer>
         );
     }

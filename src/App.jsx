@@ -8,9 +8,9 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.handleKeyPress = (event) => {
-      if (event.key == 'Enter') {
-        const username = document.getElementById('username').value;
+    this.handleSendMessage = (event) => {
+      if (event.key === 'Enter') {
+        const username = this.state.currentUser;
         const content = document.getElementById('new-message').value;
         const newMessage = {username: username, content: content};
         this.socket.send(JSON.stringify(newMessage));
@@ -18,24 +18,29 @@ class App extends Component {
       }
     };
 
+    this.handleChangeUser = (event => {
+      if (event.key === 'Enter') {
+        const username = document.getElementById('username').value;
+        this.setState({currentUser: username});
+      }
+    });
+
     this.state = {
-      currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: "Bob", // optional. if currentUser is not defined, it means the user is Anonymous
       messages: []
-    };
-  }
-
-
+    }
+  };
 
 
   componentDidMount() {
     console.log("componentDidMount <App />");
     this.socket = new WebSocket("ws://localhost:4000");
-    this.socket.onopen = function (event) {
+    this.socket.onopen = function () {
        console.log("Connected Web Socket");
      };
     this.socket.onmessage = (event) => {
       const parsed = JSON.parse(event.data);
-      const newMessage = {id: this.state.messages.length + 1, username: parsed.username, content: parsed.content};
+      const newMessage = {id: parsed.id, username: parsed.username, content: parsed.content};
       const messages = this.state.messages.concat(newMessage);
       this.setState({messages: messages});
     }
@@ -50,7 +55,8 @@ class App extends Component {
         </nav>
         <MessageList messages={this.state.messages}>
         </MessageList>
-        <ChatBar handleKeyPress={this.handleKeyPress} defaultName={this.state.currentUser.name}/>
+        <ChatBar handleChangeUser={this.handleChangeUser}
+                 handleSendMessage={this.handleSendMessage} defaultName={this.state.currentUser}/>
       </div>
     );
   }
