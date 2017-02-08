@@ -12,7 +12,7 @@ class App extends Component {
       if (event.key === 'Enter') {
         const username = this.state.currentUser;
         const content = document.getElementById('new-message').value;
-        const newMessage = {type : 'postMessage' , username: username, content: content};
+        const newMessage = {type : 'postMessage' , username: username, content: content, color : this.state.color};
         this.socket.send(JSON.stringify(newMessage));
 
       }
@@ -48,15 +48,19 @@ class App extends Component {
        console.log("Connected Web Socket");
      };
     this.socket.onmessage = (event) => {
-
       const parsed = JSON.parse(event.data);
+      console.log(parsed);
       switch(parsed.type) {
+        case "color":
+          console.log(parsed.color);
+          this.state.color = parsed.color;
+          break;
         case "onlineUsers":
           this.setState({onlineUsers: parsed.onlineUsers});
           break;
         default:
           console.log(parsed);
-          const newMessage = {id: parsed.id, username: parsed.username, content: parsed.content};
+          const newMessage = {id: parsed.id, username: parsed.username, content: parsed.content, color : parsed.color};
           const messages = this.state.messages.concat(newMessage);
           this.setState({messages: messages});
       }
@@ -71,7 +75,7 @@ class App extends Component {
           <h1>Chatty</h1>
           <span>{this.state.onlineUsers} users online</span>
         </nav>
-        <MessageList messages={this.state.messages}>
+        <MessageList messages={this.state.messages} color={this.state.color}>
         </MessageList>
         <ChatBar
           handleChange = {this.handleChange}
