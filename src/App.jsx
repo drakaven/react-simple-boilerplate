@@ -7,11 +7,14 @@ class App extends Component {
   constructor(props) {
     super(props);
 
-    this.imageReplaceContent = (content) => {
+    this.imageReplaceContent = (newMessage) => {
       const regex = /\bhttps?:\/\/\S*.(jpg|png|gif)\b/gi;
-      const match = content.match(regex);
-      console.log(match);
-      return match;
+      const match = newMessage.content.match(regex);
+      if (match){
+        newMessage.image = match[0];
+        newMessage.content =  newMessage.content.replace(match[0], '');
+      }
+      return newMessage;
     };
 
 
@@ -71,7 +74,9 @@ class App extends Component {
           this.setState({onlineUsers: parsed.onlineUsers});
           break;
         default:
-          const newMessage = {image : this.imageReplaceContent(parsed.content), id: parsed.id, username: parsed.username, content: parsed.content, color: parsed.color};
+          let newMessage = {id: parsed.id, username: parsed.username, content: parsed.content, color: parsed.color};
+          newMessage = this.imageReplaceContent(newMessage);
+
           const messages = this.state.messages.concat(newMessage);
           this.setState({messages: messages});
       }

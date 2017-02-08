@@ -6,7 +6,7 @@ class MessageList extends Component {
     
     return (
      <div id="message-list">
-       {this.props.messages.map( (item) => { return <Message image={item.image} color={item.color} key={item.id} name={item.username} content={item.content}/> })}
+       {this.props.messages.map( (item) => { return <Message image={item} color={item.color} key={item.id} name={item.username} content={item.content}/> })}
      </div>
     );
   }
