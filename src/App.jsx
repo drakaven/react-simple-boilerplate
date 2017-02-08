@@ -25,10 +25,15 @@ class App extends Component {
       }
     });
 
+    this.handleChange = (event) =>{
+      this.setState({userValue : event.target.value});
+    };
+
     this.state = {
       currentUser: "Bob", // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [],
-      onlineUsers: 0
+      onlineUsers: 0,
+      userValue: ""
     }
   };
 
@@ -57,8 +62,13 @@ class App extends Component {
         </nav>
         <MessageList messages={this.state.messages}>
         </MessageList>
-        <ChatBar handleChangeUser={this.handleChangeUser}
-                 handleSendMessage={this.handleSendMessage} defaultName={this.state.currentUser}/>
+        <ChatBar
+          handleChange = {this.handleChange}
+          handleChangeUser={this.handleChangeUser}
+          handleSendMessage={this.handleSendMessage}
+          defaultName={this.state.currentUser}
+          userValue = {this.state.userValue}
+        />
       </div>
     );
   }

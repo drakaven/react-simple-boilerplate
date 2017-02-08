@@ -18,18 +18,19 @@ const wss = new SocketServer({ server });
 wss.on('connection', (ws) => {
     console.log('Client connected');
 
-    ws.on('message', function (data, flags) {
+    ws.on('message', function (data, flags) {        
         let parsed = (JSON.parse(data));
         parsed.id = uuid.v4();
         console.log(parsed);
 
         wss.clients.forEach(function each(client) {
             if (client.readyState === ws.OPEN) {
-                client.send(JSON.stringify(parsed));
-                console.log('broadcast')
-            }
+                client.send(JSON.stringify(parsed));  
+                             
+            }           
         });
+         console.log(wss.clients.size);
     });
-
     ws.on('close', () => console.log('Client disconnected'));
+    
 })
