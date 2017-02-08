@@ -1,17 +1,22 @@
 import React, {Component} from 'react';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
-
+import Image from './InlineImage.jsx';
 
 class App extends Component {
 
   constructor(props) {
     super(props);
 
-    this.imageReplaceContent = (content) =>{
-     regex =  new RegExp(/\bhttps?:\/\/.*.(jpg|pgn|gif)\b/);
-     regex.test(content);
-     return newContent;
+    this.imageReplaceContent = (content) => {
+      const regex = /\bhttps?:\/\/\S*.(jpg|png|gif)\b/gi;
+      const matches = content.match(regex);
+      matches.forEach((item) => {
+      //let replacementItem = <Image url={item}/>;
+      //  content = content.replace(item, replacementItem);
+      });
+      console.log(content, "content");
+      return content;
     };
 
 
@@ -21,7 +26,7 @@ class App extends Component {
 
         let content = document.getElementById('new-message').value;
         content = this.imageReplaceContent(content);
-        const newMessage = {type : 'postMessage' , username: username, content: content, color : this.state.color};
+        const newMessage = {type: 'postMessage', username: username, content: content, color: this.state.color};
         this.socket.send(JSON.stringify(newMessage));
 
       }
@@ -31,14 +36,17 @@ class App extends Component {
       if (event.key === 'Enter') {
         const username = this.state.userValue;
         this.setState({currentUser: username});
-        const newMessage = {type : 'postNotification' , content: this.state.prevUser + " has changed their name to " + username};
+        const newMessage = {
+          type: 'postNotification',
+          content: this.state.prevUser + " has changed their name to " + username
+        };
         this.socket.send(JSON.stringify(newMessage));
       }
     });
 
-    this.handleChange = (event) =>{
+    this.handleChange = (event) => {
       this.state.prevUser = this.state.currentUser;
-      this.setState({userValue : event.target.value});
+      this.setState({userValue: event.target.value});
     };
 
     this.state = {
@@ -51,25 +59,25 @@ class App extends Component {
   };
 
   componentDidMount() {
-    console.log("componentDidMount <App />");
+    // console.log("componentDidMount <App />");
     this.socket = new WebSocket("ws://localhost:4000");
     this.socket.onopen = function () {
-       console.log("Connected Web Socket");
-     };
+      // console.log("Connected Web Socket");
+    };
     this.socket.onmessage = (event) => {
       const parsed = JSON.parse(event.data);
-      console.log(parsed);
-      switch(parsed.type) {
+      // console.log(parsed);
+      switch (parsed.type) {
         case "color":
-          console.log(parsed.color);
+          // console.log(parsed.color);
           this.state.color = parsed.color;
           break;
         case "onlineUsers":
           this.setState({onlineUsers: parsed.onlineUsers});
           break;
         default:
-          console.log(parsed);
-          const newMessage = {id: parsed.id, username: parsed.username, content: parsed.content, color : parsed.color};
+          // console.log(parsed);
+          const newMessage = {id: parsed.id, username: parsed.username, content: parsed.content, color: parsed.color};
           const messages = this.state.messages.concat(newMessage);
           this.setState({messages: messages});
       }
@@ -77,21 +85,21 @@ class App extends Component {
   }
 
   render() {
-    console.log("Rendering <App/>");
+    // console.log("Rendering <App/>");
     return (
       <div className="wrapper">
         <nav>
           <h1>Chatty</h1>
           <span>{this.state.onlineUsers} users online</span>
         </nav>
-        <MessageList messages={this.state.messages} color={this.state.color}>
+        <MessageList messages={this.state.messages} color={this.state.color} >
         </MessageList>
         <ChatBar
-          handleChange = {this.handleChange}
+          handleChange={this.handleChange}
           handleChangeUser={this.handleChangeUser}
           handleSendMessage={this.handleSendMessage}
           defaultName={this.state.currentUser}
-          userValue = {this.state.userValue}
+          userValue={this.state.userValue}
         />
       </div>
     );
