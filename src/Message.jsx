@@ -7,7 +7,7 @@ class Message extends Component {
     let messageImage = null;
 
     if (this.props.image.image) {
-      let messageImage = <Image url={this.props.image}/>
+      messageImage = <Image url={this.props.image.image}/>
     };
 
     console.log('message');
@@ -16,7 +16,6 @@ class Message extends Component {
       <span className={"username " + this.props.color}>{this.props.name}</span>
        <p className="content">{this.props.content}</p>
        {messageImage}
-
     </div>
     );
   }
