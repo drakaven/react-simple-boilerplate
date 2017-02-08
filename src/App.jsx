@@ -8,10 +8,19 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    this.imageReplaceContent = (content) =>{
+     regex =  new RegExp(/\bhttps?:\/\/.*.(jpg|pgn|gif)\b/);
+     regex.test(content);
+     return newContent;
+    };
+
+
     this.handleSendMessage = (event) => {
       if (event.key === 'Enter') {
         const username = this.state.currentUser;
-        const content = document.getElementById('new-message').value;
+
+        let content = document.getElementById('new-message').value;
+        content = this.imageReplaceContent(content);
         const newMessage = {type : 'postMessage' , username: username, content: content, color : this.state.color};
         this.socket.send(JSON.stringify(newMessage));
 
