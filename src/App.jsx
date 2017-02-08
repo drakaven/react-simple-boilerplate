@@ -27,7 +27,8 @@ class App extends Component {
 
     this.state = {
       currentUser: "Bob", // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: []
+      messages: [],
+      onlineUsers: 0
     }
   };
 
@@ -52,6 +53,7 @@ class App extends Component {
       <div className="wrapper">
         <nav>
           <h1>Chatty</h1>
+          <p>{this.state.onlineUsers}</p>
         </nav>
         <MessageList messages={this.state.messages}>
         </MessageList>
