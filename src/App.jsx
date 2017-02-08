@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import MessageList from './MessageList.jsx';
 import ChatBar from './ChatBar.jsx';
-import Image from './InlineImage.jsx';
 
 class App extends Component {
 
@@ -10,13 +9,9 @@ class App extends Component {
 
     this.imageReplaceContent = (content) => {
       const regex = /\bhttps?:\/\/\S*.(jpg|png|gif)\b/gi;
-      const matches = content.match(regex);
-      matches.forEach((item) => {
-      //let replacementItem = <Image url={item}/>;
-      //  content = content.replace(item, replacementItem);
-      });
-      console.log(content, "content");
-      return content;
+      const match = content.match(regex);
+      console.log(match);
+      return match;
     };
 
 
@@ -76,8 +71,7 @@ class App extends Component {
           this.setState({onlineUsers: parsed.onlineUsers});
           break;
         default:
-          // console.log(parsed);
-          const newMessage = {id: parsed.id, username: parsed.username, content: parsed.content, color: parsed.color};
+          const newMessage = {image : this.imageReplaceContent(parsed.content), id: parsed.id, username: parsed.username, content: parsed.content, color: parsed.color};
           const messages = this.state.messages.concat(newMessage);
           this.setState({messages: messages});
       }
