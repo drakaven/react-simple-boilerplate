@@ -12,7 +12,7 @@ class App extends Component {
       if (event.key === 'Enter') {
         const username = this.state.currentUser;
         const content = document.getElementById('new-message').value;
-        const newMessage = {username: username, content: content};
+        const newMessage = {type : 'postMessage' , username: username, content: content};
         this.socket.send(JSON.stringify(newMessage));
 
       }
@@ -20,23 +20,26 @@ class App extends Component {
 
     this.handleChangeUser = (event => {
       if (event.key === 'Enter') {
-        const username = document.getElementById('username').value;
+        const username = this.state.userValue;
         this.setState({currentUser: username});
+        const newMessage = {type : 'postNotification' , content: username + " has changed their name to " + this.state.prevUser};
+        this.socket.send(JSON.stringify(newMessage));
       }
     });
 
     this.handleChange = (event) =>{
+      this.state.prevUser = this.state.currentUser;
       this.setState({userValue : event.target.value});
     };
 
     this.state = {
-      currentUser: "Bob", // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: "Bob",
+      prevUser: "",// optional. if currentUser is not defined, it means the user is Anonymous
       messages: [],
       onlineUsers: 0,
       userValue: ""
     }
   };
-
 
   componentDidMount() {
     console.log("componentDidMount <App />");
