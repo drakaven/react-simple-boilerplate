@@ -22,10 +22,11 @@ WebSocket Server
 
 In the websocket folder is alone package.json file to run the websocket server
 
+```
 ./websocket
 npm install
 node server.js
-
+```
 
 ### Dependencies
 
