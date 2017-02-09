@@ -1,20 +1,16 @@
-React Boilerplate
+Chatty App
 =====================
 
-A minimal and light dev environment for ReactJS.
+Stretch goals completed, currently only handles one image
+Creates a messaging application with that connects to a websocket server
+
 
 ### Usage
 
-Clone the boilerplate and create your own git repo.
 
-```
-git clone git@github.com:lighthouse-labs/react-simple-boilerplate.git
-git remote rm origin
-git remote add origin [YOUR NEW REPOSITORY]
-# Manually update your package.json file
-```
+Install the dependencies and start the server. Requires the client server and the websocket server
 
-Install the dependencies and start the server.
+Client Server
 
 ```
 npm install
@@ -22,19 +18,14 @@ npm start
 open http://localhost:3000
 ```
 
-### Static Files
+WebSocket Server
 
-You can store static files like images, fonts, etc in the `build` folder.
+In the websocket folder is alone package.json file to run the websocket server
 
-For example, if you copy a file called my_image.png into the build folder you can access it using `http://localhost:3000/build/my_image.png`.
+./websocket
+npm install
+node server.js
 
-### Linting
-
-This boilerplate project includes React ESLint configuration.
-
-```
-npm run lint
-```
 
 ### Dependencies
 
@@ -42,3 +33,6 @@ npm run lint
 * Webpack
 * [babel-loader](https://github.com/babel/babel-loader)
 * [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
+* "express": "4.14.1",
+*    "node-uuid": "1.4.7",
+*     "ws": "2.0.2"

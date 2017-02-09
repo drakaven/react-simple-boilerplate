@@ -6,30 +6,33 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-
+    //find a the first image url and set the image value of the message
     this.imageReplaceContent = (newMessage) => {
-      const regex = /\bhttps?:\/\/\S*.(jpg|png|gif)\b/gi;
+      const regex = /\bhttps?:\/\/\S*.(jpg|png|gif)\b/i;
       const match = newMessage.content.match(regex);
       if (match){
         newMessage.image = match[0];
-        newMessage.content =  newMessage.content.replace(match[0], '');
+        newMessage.content = newMessage.content.replace(match[0], '');
       }
       return newMessage;
     };
 
+    this.getColor = function () {
+      const colors = ["blue", "red", "green", "orange"];
+      return colors[Math.floor(Math.random() * 3)];
+    };
 
+    //send the message - currently set to use the message text box as a non react controlled field
     this.handleSendMessage = (event) => {
       if (event.key === 'Enter') {
         const username = this.state.currentUser;
-
         let content = document.getElementById('new-message').value;
-        //content = this.imageReplaceContent(content);
         const newMessage = {type: 'postMessage', username: username, content: content, color: this.state.color};
         this.socket.send(JSON.stringify(newMessage));
-
       }
     };
 
+    //set the user and send notification message - react controlled field
     this.handleChangeUser = (event => {
       if (event.key === 'Enter') {
         const username = this.state.userValue;
@@ -42,6 +45,7 @@ class App extends Component {
       }
     });
 
+    //change handler for the username field
     this.handleChange = (event) => {
       this.state.prevUser = this.state.currentUser;
       this.setState({userValue: event.target.value});
@@ -49,49 +53,42 @@ class App extends Component {
 
     this.state = {
       currentUser: "Bob",
-      prevUser: "",// optional. if currentUser is not defined, it means the user is Anonymous
+      prevUser: "",
       messages: [],
       onlineUsers: 0,
-      userValue: ""
+      userValue: "",
+      color: this.getColor()
     }
   };
 
+  //handles incoming message types: color is set on connection
+  //TODO refactor color from server
   componentDidMount() {
-    // console.log("componentDidMount <App />");
     this.socket = new WebSocket("ws://localhost:4000");
-    this.socket.onopen = function () {
-      // console.log("Connected Web Socket");
-    };
     this.socket.onmessage = (event) => {
       const parsed = JSON.parse(event.data);
-      // console.log(parsed);
       switch (parsed.type) {
-        case "color":
-          // console.log(parsed.color);
-          this.state.color = parsed.color;
-          break;
         case "onlineUsers":
           this.setState({onlineUsers: parsed.onlineUsers});
           break;
         default:
           let newMessage = {id: parsed.id, username: parsed.username, content: parsed.content, color: parsed.color};
           newMessage = this.imageReplaceContent(newMessage);
-
           const messages = this.state.messages.concat(newMessage);
           this.setState({messages: messages});
       }
     }
   }
 
+  //render App
   render() {
-    // console.log("Rendering <App/>");
     return (
       <div className="wrapper">
         <nav>
           <h1>Chatty</h1>
           <span>{this.state.onlineUsers} users online</span>
         </nav>
-        <MessageList messages={this.state.messages} color={this.state.color} >
+        <MessageList messages={this.state.messages} color={this.state.color}>
         </MessageList>
         <ChatBar
           handleChange={this.handleChange}
